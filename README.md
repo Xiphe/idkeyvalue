@@ -1,6 +1,10 @@
 idkeyvalue
 ==========
 
+[![Build Status](https://travis-ci.org/Xiphe/idkeyvalue.svg)](https://travis-ci.org/Xiphe/idkeyvalue)
+[![Coverage Status](https://coveralls.io/repos/Xiphe/idkeyvalue/badge.png)](https://coveralls.io/r/Xiphe/idkeyvalue)
+[![Dependency Status](https://david-dm.org/Xiphe/idkeyvalue.svg)](https://david-dm.org/Xiphe/idkeyvalue)
+
 Unified (ID), Key - Value adapters for node database solutions
 
 
