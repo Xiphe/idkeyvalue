@@ -68,6 +68,18 @@ module.exports = (config) ->
                 idAValue.should.not.equal value
                 adapter.remove sharedKey, done
 
+          it 'should not overwrite values with another id', (done) ->
+            sharedKey = 'someKey'
+            idAValue = 'someValue'
+            idBValue = 'someOtherValue'
+            anotherAdapter = config.getInstance anotherId
+            adapter.set sharedKey, idAValue, ->
+              anotherAdapter.set sharedKey, idBValue, ->
+                adapter.get sharedKey, (err, value) ->
+                  idAValue.should.equal value
+                  anotherAdapter.remove sharedKey, ->
+                    adapter.remove sharedKey, done
+
           it 'should not remove values from another id', (done) ->
             sharedKey = 'someKey'
             idAValue = 'someValue'
@@ -77,6 +89,42 @@ module.exports = (config) ->
                 adapter.get sharedKey, (err, value) ->
                   idAValue.should.equal value
                   adapter.remove sharedKey, done
+
+        else
+          it 'should not get values with id', (done) ->
+            sharedKey = 'someKey'
+            myValue = 'someValue'
+            idAdapter = config.getInstance someId
+            idAdapter.set sharedKey, myValue, ->
+              adapter.get sharedKey, (err, value) ->
+                myValue.should.not.equal value
+                idAdapter.remove sharedKey, done
+
+          it 'should not overwrite values with id', (done) ->
+            sharedKey = 'someKey'
+            myValue = 'someValue'
+            myOtherValue = 'someOtherValue'
+            idAdapter = config.getInstance someId
+            idAdapter.set sharedKey, myValue, ->
+              adapter.set sharedKey, myOtherValue, ->
+                idAdapter.get sharedKey, (err, value) ->
+                  err.should.equal null if err
+                  myValue.should.equal value
+                  idAdapter.remove sharedKey, ->
+                    adapter.remove sharedKey, done
+
+          it 'should not delete values with id', (done) ->
+            sharedKey = 'someKey'
+            myValue = 'someValue'
+
+            idAdapter = config.getInstance someId
+            idAdapter.set sharedKey, myValue, ->
+              adapter.remove sharedKey, ->
+                idAdapter.get sharedKey, (err, value) ->
+                  err.should.equal null if err
+                  myValue.should.equal value
+                  idAdapter.remove sharedKey, done
+
 
     describe 'decoupled instance', ->
       decoupledAdapter = null
@@ -161,6 +209,3 @@ module.exports = (config) ->
             adapter.remove 'myValue', (err) ->
               err.should.equal error
               done()
-
-
-
