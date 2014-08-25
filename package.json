@@ -1,0 +1,31 @@
+{
+  "name": "idkeyvalue",
+  "version": "0.0.1",
+  "description": "Unified (ID), Key - Value adapters for node database solutions",
+  "main": "lib/index.js",
+  "author": "Hannes Diercks <idkeyvalue@xiphe.net>",
+  "license": "MIT",
+  "repository": "git@github.com:Xiphe/idkeyvalue.git",
+  "homepage": "https://github.com/Xiphe/idkeyvalue",
+  "keywords": [
+    "storage",
+    "key-value",
+    "adapter"
+  ],
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register -R spec",
+    "watch": "mocha --compilers coffee:coffee-script/register --watch -R spec",
+    "coverage": "istanbul cover _mocha --report html -- --compilers coffee:coffee-script/register -R spec -t 3000 -s 2000",
+    "coveralls": "istanbul cover _mocha --report lcovonly -- --compilers coffee:coffee-script/register -R spec -t 3000 -s 2000 && cat ./coverage/lcov.info | coveralls"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.7.1",
+    "nedb": "~0.10.5",
+    "mocha": "~1.20.1",
+    "sinon": "~1.10.2",
+    "chai": "~1.9.1",
+    "sinon-chai": "~2.5.0",
+    "istanbul": "~0.2.8",
+    "coveralls": "~2.10.0"
+  }
+}
