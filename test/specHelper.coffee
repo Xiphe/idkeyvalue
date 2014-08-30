@@ -58,6 +58,12 @@ module.exports = (config) ->
             err.message.should.match /someKey/
             done()
 
+        it 'should not return an error when we switch silent to true', (done) ->
+          adapter.get 'someKey', true, (err, value) ->
+            err.should.equal null if err
+            (typeof value).should.equal 'undefined'
+            done()
+
         if hasId
           it 'should not get values from another id', (done) ->
             sharedKey = 'someKey'
