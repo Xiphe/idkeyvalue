@@ -14,7 +14,7 @@ Interface
  - `.set(key, value, done[(err)])`  
     The done callback is optional and called with any errors that occurred while saving.
 
- - `.get(key, (silent), done[(err, value)])`  
+ - `.get(key, (silent,) done[(err, value)])`  
     The done callback is called with the stored value or any errors that occurred while getting.  
     If `silent` is set to true (default: false), instead of the "not found" error, we're just
     returning an undefined value
