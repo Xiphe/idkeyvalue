@@ -58,11 +58,26 @@ module.exports = (config) ->
             err.message.should.match /someKey/
             done()
 
-        it 'should not return an error when we switch silent to true', (done) ->
+        it 'should not return an error when get is called with a default value', (done) ->
           adapter.get 'someKey', true, (err, value) ->
             err.should.equal null if err
-            (typeof value).should.equal 'undefined'
-            done()
+            done err
+
+        it 'should return default values when no entry is found', (done) ->
+          myDefault = 'a'
+          adapter.get 'someKey', myDefault, (err, value) ->
+            value.should.equal myDefault
+            done err
+
+        it 'should not return default values when entry is found', (done) ->
+          myKey = 'someKey'
+          myValue = 'a'
+          myDefault = 'b'
+          adapter.set myKey, myValue, ->
+            adapter.get myKey, myDefault, (err, value) ->
+              value.should.not.equal myDefault
+              value.should.equal myValue
+              adapter.remove myKey, done
 
         if hasId
           it 'should not get values from another id', (done) ->
