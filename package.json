@@ -1,6 +1,6 @@
 {
   "name": "idkeyvalue",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Unified (ID), Key - Value adapters for node databases",
   "main": "lib/index.js",
   "author": "Hannes Diercks <idkeyvalue@xiphe.net>",
