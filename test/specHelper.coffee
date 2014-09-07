@@ -223,6 +223,20 @@ module.exports = (config) ->
 
                   adapter.remove myKey, done
 
+          it 'should be callable without done callback', (done) ->
+            myUpdateValue = 'anotherValue'
+            myKey = 'someKey'
+
+            adapter.update myKey, 'lorem', (value, done) ->
+              done null, myUpdateValue
+
+            setTimeout ->
+              adapter.get myKey, (err, value) ->
+                value.should.equal myUpdateValue
+
+                adapter.remove myKey, done
+            , 5
+
           describe 'errors', ->
             it 'should break on get error', (done) ->
               myKey = 'someKey'
@@ -260,6 +274,20 @@ module.exports = (config) ->
                 adapter.set.should.have.been.calledWith myKey, myValue
                 err.should.equal myError
                 done()
+
+            it 'should fail silently without done callback', (done) ->
+              myKey = 'someKey'
+              myError = new Error 'Test';
+              sinon.stub(adapter, 'get').callsArgWithAsync 1, myError
+              updater = sinon.spy()
+
+              adapter.update myKey, updater
+
+              setTimeout ->
+                updater.should.not.have.been.called
+                done()
+              , 5
+
 
     describe 'decoupled instance', ->
       decoupledAdapter = null
