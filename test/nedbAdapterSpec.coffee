@@ -33,7 +33,7 @@ specHelper specConfig
 
 fileDb = new Datastore filename: './test.nedb', autoload: true
 specConfig =
-  name: 'NedbAdapter in memory'
+  name: 'NedbAdapter persistent'
   getInstance: (id) ->
     new NedbAdapter fileDb, id
   getDecoupledInstance: (id) ->
