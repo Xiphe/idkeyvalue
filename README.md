@@ -5,7 +5,7 @@ idkeyvalue
 [![Coverage Status](https://coveralls.io/repos/Xiphe/idkeyvalue/badge.png)](https://coveralls.io/r/Xiphe/idkeyvalue)
 [![Dependency Status](https://david-dm.org/Xiphe/idkeyvalue.svg)](https://david-dm.org/Xiphe/idkeyvalue)
 
-Unified (ID), Key - Value adapters for node database solutions.
+Unified (ID), Key - Value adapters for node databases.
 
 
 Interface
@@ -14,10 +14,9 @@ Interface
  - `.set(key, value, done[(err)])`  
     The done callback is optional and called with any errors that occurred while saving.
 
- - `.get(key, (silent,) done[(err, value)])`  
+ - `.get(key, (defaultValue,) done[(err, value)])`  
     The done callback is called with the stored value or any errors that occurred while getting.  
-    If `silent` is set to true (default: false), instead of the "not found" error, we're just
-    returning an undefined value
+    If `defaultValue` is given, that value will be returned in case no entries were found in database.
 
  - `.remove(key, done[(err)])`  
     The done callback is optional and called with any errors that occurred while deleting.
