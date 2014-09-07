@@ -38,6 +38,45 @@ module.exports = (config) ->
                   myValue.should.not.equal value
                   done()
 
+        it 'should not get other values', (done) ->
+          valueA = 'a'
+          valueB = 'b'
+          keyA = 'someKeyA'
+          keyB = 'someKeyB'
+          adapter.set keyA, valueA, ->
+            adapter.set keyB, valueB, ->
+              adapter.get keyB, (err, value) ->
+                value.should.equal valueB
+                adapter.get keyA, (err, value) ->
+                  value.should.equal valueA
+
+                  adapter.remove keyA, ->
+                    adapter.remove keyB, done
+
+        it 'should store objects', (done) ->
+          myNestedObject =
+            string: 'foo',
+            number: 7
+            float: 7.1
+            boolean: false
+            array: ['a', 'b']
+            hash: lorem: 'ipsum'
+
+          myKey = 'someKey'
+
+          adapter.set myKey, myNestedObject, ->
+            adapter.get myKey, (err, value) ->
+              value.should.be.an 'object'
+              value.string.should.be.a 'string'
+              value.number.should.be.a 'number'
+              value.float.should.be.a 'number'
+              value.boolean.should.be.a 'boolean'
+              value.array.should.be.an 'array'
+              value.hash.should.be.an 'object'
+              value.hash.lorem.should.be.a 'string'
+
+              adapter.remove myKey, done
+
         it 'should share data between instances', (done) ->
           myValue = 'someValue'
           myKey = 'someKey'
