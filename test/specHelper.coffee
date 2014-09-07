@@ -185,6 +185,81 @@ module.exports = (config) ->
                   myValue.should.equal value
                   idAdapter.remove sharedKey, done
 
+        describe 'update helper', ->
+          it 'should update values', (done) ->
+            myValue = 'someValue'
+            myUpdateValue = 'anotherValue'
+            myKey = 'someKey'
+
+            updater = (value, done) ->
+              value.should.equal myValue
+              done null, myUpdateValue
+
+            adapter.set myKey, myValue, ->
+              adapter.update myKey, updater, (err, value) ->
+                value.should.equal myUpdateValue
+
+                adapter.get myKey, (err, value) ->
+                  value.should.equal myUpdateValue
+
+                  adapter.remove myKey, done
+
+          it 'should update default values', (done) ->
+            myDefaultValue = 'someDefaultValue'
+            myKey = 'someKey'
+
+            updater = (value, done) ->
+              value.should.equal myDefaultValue
+              done null, value
+
+            adapter.get myKey, (err, value) ->
+              err.should.be.an.instanceof Error
+
+              adapter.update myKey, myDefaultValue, updater, (err, value) ->
+                value.should.equal myDefaultValue
+
+                adapter.get myKey, (err, value) ->
+                  value.should.equal myDefaultValue
+
+                  adapter.remove myKey, done
+
+          describe 'errors', ->
+            it 'should break on get error', (done) ->
+              myKey = 'someKey'
+              myError = new Error 'Test';
+              sinon.stub(adapter, 'get').callsArgWithAsync 1, myError
+              updater = sinon.spy()
+
+              adapter.update myKey, updater, (err, value) ->
+                err.should.equal myError
+                updater.should.not.have.been.called
+                done()
+
+            it 'should break on update error', (done) ->
+              myKey = 'someKey'
+              myError = new Error 'Test';
+              updater = (value, done) ->
+                done myError
+
+              sinon.spy adapter, 'set'
+
+              adapter.update myKey, 'asd', updater, (err, value) ->
+                err.should.equal myError
+                adapter.set.should.not.have.been.called
+                done()
+
+            it 'should break on set errors', (done) ->
+              myKey = 'someKey'
+              myValue = 'lorem'
+              myError = new Error 'Test';
+              sinon.stub(adapter, 'set').callsArgWithAsync 2, myError
+              updater = (value, done) ->
+                done null, value
+
+              adapter.update myKey, myValue, updater, (err, value) ->
+                adapter.set.should.have.been.calledWith myKey, myValue
+                err.should.equal myError
+                done()
 
     describe 'decoupled instance', ->
       decoupledAdapter = null

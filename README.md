@@ -11,16 +11,19 @@ Unified (ID), Key - Value adapters for node databases.
 Interface
 ---------
 
- - `.set(key, value, done[(err)])`  
+ - `.set(key, value, done[err])`  
     The done callback is optional and called with any errors that occurred while saving.
 
- - `.get(key, (defaultValue,) done[(err, value)])`  
+ - `.get(key, (defaultValue,) done[err, value])`  
     The done callback is called with the stored value or any errors that occurred while getting.  
     If `defaultValue` is given, that value will be returned in case no entries were found in database.
 
- - `.remove(key, done[(err)])`  
+ - `.remove(key, done[err])`  
     The done callback is optional and called with any errors that occurred while deleting.
 
+ - `.update(key, (defaultValue,) updater[value, done[err, updatedValue]], done[err, updatedValue])`  
+    Shorthand for get, update, set operations. updater is called with stored/default value and is
+    expected to call `done` with any error and the updated value.
 
 Id ?!?
 ------
@@ -65,6 +68,7 @@ var objectAdapter = new ObjectAdapter(store); // optional id as 2nd param
 // objectAdapter.set( ...
 // objectAdapter.get( ...
 // objectAdapter.remove( ...
+// objectAdapter.update( ...
 ```
 
 ### NedbAdapter
@@ -81,6 +85,7 @@ var nedbAdapter = new NedbAdapter(database); // optional id as 2nd param
 // nedbAdapter.set( ...
 // nedbAdapter.get( ...
 // nedbAdapter.remove( ...
+// nedbAdapter.update( ...
 ```
 
 Contributing
